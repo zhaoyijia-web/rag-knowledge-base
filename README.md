@@ -1,4 +1,4 @@
-# 奥智企业 RAG 知识库问答
+# 企业 RAG 知识库问答
 
 一个面向中文企业文档的本地 RAG 知识库。系统采用 **BGE-M3 向量召回 + BM25 关键词召回 + 加权 RRF 融合 + Qwen3 精排 + DeepSeek 证据化生成**，并在前端完整展示每一步检索结果、得分、来源及耗时。
 
@@ -141,7 +141,7 @@ npm run dev -- --host 127.0.0.1
 ```bash
 curl -X POST http://127.0.0.1:8000/api/ask \
   -H 'Content-Type: application/json' \
-  -d '{"question":"奥智的使命是什么？"}'
+  -d '{"question":"公司的使命是什么？"}'
 ```
 
 接口返回生成答案、5 个来源文本块，以及向量检索、BM25、融合、精排和生成耗时。
