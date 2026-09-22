@@ -11,6 +11,7 @@ frontend/dist/
 发周2026.8.12/
 奥智RAG知识库问答功能方案.md
 eval/
+ingestion/
 
 # 由公司资料生成的切块、转换文档和检索索引
 data/

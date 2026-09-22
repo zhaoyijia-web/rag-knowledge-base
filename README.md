@@ -54,7 +54,6 @@
 .
 ├── backend/              # FastAPI 接口与应用服务
 ├── frontend/             # Vite + React 前端
-├── ingestion/            # DOC/DOCX 解析与结构化切分
 ├── rag/                  # Prompt 与 DeepSeek 生成链路
 ├── retrieval/            # Chroma、BM25、RRF 和 Reranker
 ├── tests/                # 单元测试与 API 测试
@@ -105,12 +104,11 @@ uv run modelscope download --model BAAI/bge-m3 --local_dir /本机模型目录/b
 uv run modelscope download --model Qwen/Qwen3-Reranker-0.6B --local_dir /本机模型目录/Qwen3-Reranker-0.6B
 ```
 
-将自己的企业文档放入本地数据目录后，按照 `ingestion/` 中的解析逻辑生成 `data/processed/chunks.jsonl`。本仓库不公开原始企业资料和已生成索引。
+将企业文档处理为 `data/processed/chunks.jsonl` 后即可构建索引。出于企业资料保护考虑，本仓库不公开原始文档、文档解析程序、切块结果和已生成索引。
 
 ### 3. 构建索引
 
 ```bash
-uv run python main.py
 uv run python -m retrieval.build_index
 ```
 
