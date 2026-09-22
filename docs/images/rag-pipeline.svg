@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">企业知识库 RAG 检索与生成流程</title>
+  <desc id="desc">用户问题同时进入 BGE-M3 向量召回和 BM25 关键词召回，经过加权 RRF 融合、Qwen3 精排，选出五个证据文本块，交给 DeepSeek 生成带来源引用的答案。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8faf4"/><stop offset="1" stop-color="#ecf7d9"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#152019" flood-opacity=".10"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#26352d"/></marker>
+    <style>
+      .title{font:700 42px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;fill:#132019}.subtitle{font:400 20px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;fill:#5a675f}.step{font:700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:2px;fill:#76837b}.node-title{font:700 25px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;fill:#132019}.node-text{font:400 17px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;fill:#526058}.tag{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#213027}.arrow{stroke:#26352d;stroke-width:3;fill:none;marker-end:url(#arrow)}.card{fill:#fff;stroke:#d9e1da;stroke-width:2;filter:url(#shadow)}.accent{fill:#baff27}.dark{fill:#142019;stroke:#142019;stroke-width:2;filter:url(#shadow)}.dark-title{font:700 25px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;fill:#f7faf7}.dark-text{font:400 17px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;fill:#bdc9c1}
+    </style>
+  </defs>
+  <rect width="1600" height="900" rx="34" fill="url(#bg)"/>
+  <text x="76" y="84" class="title">从问题到可追溯答案</text>
+  <text x="76" y="120" class="subtitle">混合召回扩大候选覆盖，RRF 融合互补排序，精排模型筛出最相关证据，再由大模型严格依据上下文作答。</text>
+  <g transform="translate(76 180)"><rect class="dark" width="240" height="150" rx="24"/><rect class="accent" x="28" y="27" width="56" height="28" rx="14"/><text x="46" y="47" class="tag">01</text><text x="28" y="91" class="dark-title">用户问题</text><text x="28" y="122" class="dark-text">中文自然语言 Query</text></g>
+  <path class="arrow" d="M316 255H385"/><path class="arrow" d="M350 255V446H385"/>
+  <g transform="translate(385 160)"><rect class="card" width="310" height="185" rx="24"/><text x="28" y="38" class="step">PARALLEL RETRIEVAL</text><text x="28" y="80" class="node-title">BGE-M3 向量召回</text><text x="28" y="112" class="node-text">语义相似度检索</text><rect x="28" y="137" width="104" height="29" rx="14" fill="#eef7dc"/><text x="44" y="157" class="tag">TOP_K = 10</text></g>
+  <g transform="translate(385 385)"><rect class="card" width="310" height="185" rx="24"/><text x="28" y="38" class="step">PARALLEL RETRIEVAL</text><text x="28" y="80" class="node-title">BM25 关键词召回</text><text x="28" y="112" class="node-text">精确词项与参数匹配</text><rect x="28" y="137" width="104" height="29" rx="14" fill="#eef7dc"/><text x="44" y="157" class="tag">TOP_K = 10</text></g>
+  <path class="arrow" d="M695 252H764V335H825"/><path class="arrow" d="M695 477H764V395H825"/>
+  <g transform="translate(825 255)"><rect class="card" width="310" height="220" rx="24"/><text x="28" y="39" class="step">WEIGHTED FUSION</text><text x="28" y="82" class="node-title">加权 RRF 融合</text><text x="28" y="116" class="node-text">按 chunk_id 合并去重</text><rect x="28" y="141" width="112" height="31" rx="15" fill="#eef7dc"/><text x="42" y="162" class="tag">VECTOR 0.6</text><rect x="151" y="141" width="102" height="31" rx="15" fill="#f1f3f1"/><text x="166" y="162" class="tag">BM25 0.4</text><text x="28" y="202" class="node-text">保留融合排名前 10 块</text></g>
+  <path class="arrow" d="M1135 365H1205"/>
+  <g transform="translate(1205 255)"><rect class="dark" width="319" height="220" rx="24"/><text x="28" y="39" class="step">NEURAL RERANKING</text><text x="28" y="82" class="dark-title">Qwen3 精排</text><text x="28" y="116" class="dark-text">Reranker-0.6B</text><text x="28" y="149" class="dark-text">判断问题—证据相关性</text><rect class="accent" x="28" y="174" width="134" height="31" rx="15"/><text x="43" y="195" class="tag">FINAL TOP 5</text></g>
+  <path class="arrow" d="M1365 475V567"/>
+  <g transform="translate(965 567)"><rect class="card" width="559" height="190" rx="24"/><text x="28" y="39" class="step">EVIDENCE-GROUNDED GENERATION</text><text x="28" y="83" class="node-title">DeepSeek 证据化生成</text><text x="28" y="117" class="node-text">问题 + 最相关 5 个文本块 → 受约束回答</text><rect x="28" y="141" width="151" height="30" rx="15" fill="#eef7dc"/><text x="43" y="162" class="tag">答案内联引用</text><rect x="190" y="141" width="151" height="30" rx="15" fill="#f1f3f1"/><text x="205" y="162" class="tag">来源文件追溯</text><rect x="352" y="141" width="143" height="30" rx="15" fill="#f1f3f1"/><text x="367" y="162" class="tag">无证据则拒答</text></g>
+  <path class="arrow" d="M965 662H865"/>
+  <g transform="translate(385 582)"><rect class="dark" width="480" height="160" rx="24"/><rect class="accent" x="28" y="27" width="56" height="28" rx="14"/><text x="46" y="47" class="tag">06</text><text x="28" y="91" class="dark-title">最终可追溯答案</text><text x="28" y="124" class="dark-text">答案、引用来源、检索得分与各阶段耗时</text></g>
+  <text x="76" y="836" class="subtitle">索引侧：公司文档 → 结构化切分 → BGE-M3 Embedding → Chroma；同一批文本块同步构建 BM25 索引。</text>
+</svg>
