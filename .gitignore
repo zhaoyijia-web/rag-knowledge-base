@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+.env
+frontend/node_modules/
+frontend/dist/
+
+# 公司原始资料与内部方案
+发周2026.8.4/
+发周2026.8.12/
+奥智RAG知识库问答功能方案.md
+eval/
+
+# 由公司资料生成的切块、转换文档和检索索引
+data/
+
+# 本地大模型权重和运行文件
+models/
+*.log

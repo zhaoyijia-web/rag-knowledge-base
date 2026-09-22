@@ -1,0 +1,16 @@
+[project]
+name = "aozhi-rag"
+version = "0.1.0"
+description = "奥智企业知识库 RAG 问答系统"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.5.9",
+    "fastapi>=0.118.0",
+    "jieba>=0.42.1",
+    "langchain>=1.4.2",
+    "langchain-chroma>=1.1.0",
+    "modelscope>=1.40.1",
+    "python-docx>=1.2.0",
+    "rank-bm25>=0.2.2",
+    "sentence-transformers>=6.1.0",
+]
