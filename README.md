@@ -41,11 +41,11 @@
 | --- | --- |
 | 前端 | Vite、React |
 | 后端 | FastAPI、Python 3.12、uv |
-| 向量模型 | BAAI/bge-m3（本地 MPS） |
+| 向量模型 | BAAI/bge-m3 |
 | 关键词检索 | BM25、Jieba |
 | 向量数据库 | Chroma PersistentClient |
 | 融合算法 | Weighted Reciprocal Rank Fusion |
-| 重排序模型 | Qwen/Qwen3-Reranker-0.6B（本地 MPS） |
+| 重排序模型 | Qwen/Qwen3-Reranker-0.6B |
 | 生成模型 | deepseek-v4-flash |
 
 ## 项目结构
