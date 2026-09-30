@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
-const SAMPLES = ['奥智的使命是什么？', '矫直切割机最大线速度是多少？', '复绕机由哪些系统组成？']
+const SAMPLES = ['矫直切割机最大线速度是多少？', '复绕机由哪些系统组成？', '滑动轴承和滚动轴承的温度限值是多少？']
 
 const fmt = (value, digits = 3) => value == null ? '—' : Number(value).toFixed(digits)
 const ms = (value) => value == null ? '—' : `${Math.round(value)} ms`
 
 function Logo() {
-  return <div className="logo-mark" aria-label="奥智智库"><span>O</span><i /></div>
+  return <div className="logo-mark" aria-label="企业智库"><span>E</span><i /></div>
 }
 
 function StatusPill({ health, error }) {
@@ -84,7 +84,7 @@ function PipelineSkeleton() {
 function App() {
   const [health, setHealth] = useState(null)
   const [healthError, setHealthError] = useState(false)
-  const [question, setQuestion] = useState('奥智的使命是什么？')
+  const [question, setQuestion] = useState('矫直切割机最大线速度是多少？')
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -128,7 +128,7 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="brand"><Logo /><div><strong>奥智智库</strong><span>RAG KNOWLEDGE LAB</span></div></div>
+        <div className="brand"><Logo /><div><strong>企业智库</strong><span>RAG KNOWLEDGE LAB</span></div></div>
         <nav><a href="#ask">智能问答</a><a href="#pipeline">检索链路</a></nav>
         <StatusPill health={health} error={healthError} />
       </header>
@@ -144,7 +144,7 @@ function App() {
             <label htmlFor="question">向知识库提问</label>
             <div className="input-row">
               <textarea id="question" value={question} onChange={(e) => setQuestion(e.target.value)} maxLength={500}
-                placeholder="例如：奥智的使命是什么？" rows={3} />
+                placeholder="例如：矫直切割机最大线速度是多少？" rows={3} />
               <button type="submit" disabled={loading || !question.trim()}>
                 {loading ? '检索中' : '开始检索'}<span>↗</span>
               </button>

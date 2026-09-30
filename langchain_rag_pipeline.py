@@ -53,8 +53,8 @@ REVIEW_PATH = EXPERIMENT_ROOT / "pdf_page_review.json"
 INDEX_DIR = EXPERIMENT_ROOT / "langchain_pdf_pilot"
 COLLECTION = "enterprise_rag_pdf_pilot"
 PDF_SOURCES = (
-    ("fire_safety_standard", "发周2026.8.4/GB 35181-2025 重大火灾隐患判定规则.pdf", "重大火灾隐患判定规则"),
-    ("air_emission_standard", "发周2026.8.4/DB32 4041-2021大气污染物综合排放标准.pdf", "大气污染物综合排放标准"),
+    ("fire_safety_standard", "source_docs/GB 35181-2025 重大火灾隐患判定规则.pdf", "重大火灾隐患判定规则"),
+    ("air_emission_standard", "source_docs/DB32 4041-2021大气污染物综合排放标准.pdf", "大气污染物综合排放标准"),
 )
 
 

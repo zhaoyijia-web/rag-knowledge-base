@@ -7,9 +7,9 @@ frontend/node_modules/
 frontend/dist/
 
 # 公司原始资料与内部方案
-发周2026.8.4/
-发周2026.8.12/
-奥智RAG知识库问答功能方案.md
+发周*/
+source_docs/
+*RAG知识库问答功能方案.md
 eval/
 ingestion/
 

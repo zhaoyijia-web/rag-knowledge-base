@@ -12,7 +12,7 @@ class FakeService:
         return {
             "status": "ok",
             "chunks": 375,
-            "collection": "aozhi_knowledge_base",
+            "collection": "enterprise_rag_pdf_pilot",
             "embedding_model": "bge-m3",
             "reranker_model": "Qwen3-Reranker-0.6B",
             "generator_model": "deepseek-v4-flash",
@@ -21,13 +21,13 @@ class FakeService:
     def ask(self, question):
         return {
             "question": question,
-            "answer": "奥智的使命是……[资料1]",
+            "answer": "请参考示例手册的第一章。[资料1]",
             "sources": [{
                 "index": 1,
-                "file": "员工手册.docx",
+                "file": "示例手册.docx",
                 "section": "第一章",
                 "chunk_id": "employee_handbook_0005",
-                "content": "第一条 奥智的使命是……",
+                "content": "第一条 示例内容。",
                 "reranker_score": 8.5,
             }],
             "timings": {
@@ -61,9 +61,9 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(response.json()["chunks"], 375)
 
     def test_ask(self):
-        response = self.client.post("/api/ask", json={"question": "  奥智的使命是什么？  "})
+        response = self.client.post("/api/ask", json={"question": "  第一章主要内容是什么？  "})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["question"], "奥智的使命是什么？")
+        self.assertEqual(response.json()["question"], "第一章主要内容是什么？")
         self.assertEqual(response.json()["sources"][0]["chunk_id"], "employee_handbook_0005")
         self.assertIn("trace", response.json())
 

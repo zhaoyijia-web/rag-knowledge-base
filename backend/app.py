@@ -27,7 +27,7 @@ def create_app(service_factory: Callable[[], RAGService] = RAGService) -> FastAP
         yield
 
     application = FastAPI(
-        title="奥智 RAG 知识库问答 API",
+        title="企业 RAG 知识库问答 API",
         version="0.1.0",
         description="基于 BGE-M3、BM25、Qwen3 Reranker 和 DeepSeek 的企业知识库问答服务。",
         lifespan=lifespan,
@@ -47,7 +47,7 @@ def create_app(service_factory: Callable[[], RAGService] = RAGService) -> FastAP
 
     @application.get("/", include_in_schema=False)
     async def root() -> dict:
-        return {"name": "奥智 RAG 知识库问答 API", "docs": "/docs"}
+        return {"name": "企业 RAG 知识库问答 API", "docs": "/docs"}
 
     @application.get("/api/health", response_model=HealthResponse)
     async def health(request: Request) -> dict:
@@ -67,4 +67,3 @@ def create_app(service_factory: Callable[[], RAGService] = RAGService) -> FastAP
 
 
 app = create_app()
-
