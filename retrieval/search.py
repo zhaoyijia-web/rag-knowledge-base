@@ -33,7 +33,8 @@ class HybridRetriever:
         self.by_id = {chunk["chunk_id"]: chunk for chunk in self.chunks}
         bm25_data = json.loads(BM25_PATH.read_text(encoding="utf-8"))
         self.bm25_ids = bm25_data["chunk_ids"]
-        self.bm25 = BM25Okapi(bm25_data["tokenized_corpus"])
+        # 独立 LangChain 索引使用 tokens 字段；兼容旧索引的 tokenized_corpus 字段。
+        self.bm25 = BM25Okapi(bm25_data.get("tokens", bm25_data.get("tokenized_corpus")))
         self.embedding_model = SentenceTransformer(str(EMBEDDING_MODEL_PATH), device=self.device)
         self.collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION_NAME)
         self.reranker = None
@@ -41,7 +42,7 @@ class HybridRetriever:
             self.reranker = CrossEncoder(
                 str(RERANKER_MODEL_PATH),
                 device=self.device,
-                max_length=1024,
+                max_length=5120,
                 prompts={"enterprise_qa": RERANK_INSTRUCTION},
                 default_prompt_name="enterprise_qa",
             )

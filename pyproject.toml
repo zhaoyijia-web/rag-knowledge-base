@@ -1,7 +1,7 @@
 [project]
 name = "aozhi-rag"
 version = "0.1.0"
-description = "奥智企业知识库 RAG 问答系统"
+description = "企业知识库 RAG 问答系统"
 requires-python = ">=3.12"
 dependencies = [
     "chromadb>=1.5.9",
@@ -9,8 +9,13 @@ dependencies = [
     "jieba>=0.42.1",
     "langchain>=1.4.2",
     "langchain-chroma>=1.1.0",
+    "langchain-community==0.4.1",
+    "langchain-text-splitters>=1.1.2",
     "modelscope>=1.40.1",
+    "pymupdf>=1.28.2",
     "python-docx>=1.2.0",
+    "python-dotenv>=1.2.3",
+    "ragas>=0.4.3",
     "rank-bm25>=0.2.2",
     "sentence-transformers>=6.1.0",
 ]

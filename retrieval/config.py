@@ -11,16 +11,18 @@ if env_path.exists():
         if line and not line.startswith("#") and "=" in line:
             key, value = line.split("=", 1)
             os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
-CHUNKS_PATH = PROJECT_ROOT / "data" / "processed" / "chunks.jsonl"
-CHROMA_PATH = PROJECT_ROOT / "data" / "chroma"
-BM25_PATH = PROJECT_ROOT / "data" / "index" / "bm25_corpus.json"
+# 网页与命令行共用已审核的六文件实验索引。旧 data/chroma 已删除，不能再作为运行时数据源。
+ACTIVE_INDEX_DIR = PROJECT_ROOT / "data" / "experiments" / "langchain_pdf_pilot"
+CHUNKS_PATH = ACTIVE_INDEX_DIR / "chunks.jsonl"
+CHROMA_PATH = ACTIVE_INDEX_DIR / "chroma"
+BM25_PATH = ACTIVE_INDEX_DIR / "bm25.json"
 EMBEDDING_MODEL_PATH = Path(
     os.getenv("EMBEDDING_MODEL_PATH") or PROJECT_ROOT / "models" / "embedding" / "bge-m3"
 ).expanduser()
 RERANKER_MODEL_PATH = Path(
     os.getenv("RERANKER_MODEL_PATH") or PROJECT_ROOT / "models" / "reranker" / "Qwen3-Reranker-0.6B"
 ).expanduser()
-COLLECTION_NAME = "aozhi_knowledge_base"
+COLLECTION_NAME = "enterprise_rag_pdf_pilot"
 
 VECTOR_TOP_K = 10
 BM25_TOP_K = 10

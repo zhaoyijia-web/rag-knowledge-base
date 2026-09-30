@@ -1,6 +1,6 @@
 # 企业 RAG 知识库问答
 
-一个面向中文企业文档的本地 RAG 知识库。系统采用 **BGE-M3 向量召回 + BM25 关键词召回 + 加权 RRF 融合 + Qwen3 精排 + DeepSeek 证据化生成**，并在前端完整展示每一步检索结果、得分、来源及耗时。
+一个面向中文企业文档的本地 RAG 知识库。系统采用 **BGE-M3 向量召回 + BM25 关键词召回 + 加权 RRF 融合 + Qwen3 精排 + DeepSeek 证据化生成**。仓库还提供六文件 LangChain 建库与命令行问答脚本；FastAPI/React 演示读取该脚本生成的同一索引。
 
 > 企业原始文档、评测数据、模型权重、向量索引和 API Key 均未提交到本仓库。
 
@@ -41,11 +41,12 @@
 | --- | --- |
 | 前端 | Vite、React |
 | 后端 | FastAPI、Python 3.12、uv |
-| 向量模型 | BAAI/bge-m3（本地 MPS） |
+| 向量模型 | BAAI/bge-m3 |
 | 关键词检索 | BM25、Jieba |
 | 向量数据库 | Chroma PersistentClient |
+| 六文件实验编排 | LangChain Document、LangChain Chroma |
 | 融合算法 | Weighted Reciprocal Rank Fusion |
-| 重排序模型 | Qwen/Qwen3-Reranker-0.6B（本地 MPS） |
+| 重排序模型 | Qwen/Qwen3-Reranker-0.6B |
 | 生成模型 | deepseek-v4-flash |
 
 ## 项目结构
@@ -56,9 +57,9 @@
 ├── frontend/             # Vite + React 前端
 ├── rag/                  # Prompt 与 DeepSeek 生成链路
 ├── retrieval/            # Chroma、BM25、RRF 和 Reranker
+├── langchain_rag_pipeline.py  # 六文件建库与问答命令行脚本
 ├── tests/                # 单元测试与 API 测试
 ├── docs/images/          # README 展示图片
-├── main.py               # 文档解析入口
 └── pyproject.toml        # Python 项目依赖
 ```
 
@@ -104,15 +105,34 @@ uv run modelscope download --model BAAI/bge-m3 --local_dir /本机模型目录/b
 uv run modelscope download --model Qwen/Qwen3-Reranker-0.6B --local_dir /本机模型目录/Qwen3-Reranker-0.6B
 ```
 
-将企业文档处理为 `data/processed/chunks.jsonl` 后即可构建索引。出于企业资料保护考虑，本仓库不公开原始文档、文档解析程序、切块结果和已生成索引。
+出于企业资料保护考虑，本仓库不公开原始文档、Word 文档解析程序、切块结果和已生成索引。因此，公开仓库无法只靠 `git clone` 复现下面的六文件建库；需要在本地准备对应的 4 份 Word、2 份 PDF 和私有的 `ingestion/build_chunks.py`。
 
-### 3. 构建索引
+### 3. 运行六文件 LangChain 实验（命令行）
+
+以下命令均在项目根目录执行。两份 PDF 使用 PyMuPDF 提取原生文字，无 OCR；审核稿只保留两份标准的第 3～6 章，火灾规则另保留附录 A。每个大章节对应一个向量块，并记录 PDF 物理页码范围。Word 仍沿用各自的切块规则。
+
+当前本地已有 `data/experiments/pdf_page_review.json`，先对照原 PDF 核查其中 `chapters[*].segments`，尤其是排放标准表格的行列、数值和单位。**已有审核稿时不要运行 `prepare`**；它会因文件已存在而拒绝覆盖。只有确认全部章节后，才执行：
 
 ```bash
-uv run python -m retrieval.build_index
+uv run python langchain_rag_pipeline.py approve --confirm-reviewed
+uv run python langchain_rag_pipeline.py build
+uv run python langchain_rag_pipeline.py search "重大火灾隐患如何判定？"
+uv run python langchain_rag_pipeline.py ask "重大火灾隐患如何判定？"
 ```
 
-### 4. 启动后端
+如果在新环境中**尚无审核稿**，先运行 `uv run python langchain_rag_pipeline.py prepare`，人工核对后再执行上述命令。实验索引已存在且需要重新向量化时，用 `rebuild` 代替 `build`；旧实验索引会被保留为备份：
+
+```bash
+uv run python langchain_rag_pipeline.py rebuild
+```
+
+新集合名为 `enterprise_rag_pdf_pilot`，保存在 `data/experiments/langchain_pdf_pilot/chroma/`；同目录还会生成 `chunks.jsonl`、`bm25.json` 和 `manifest.json`。精排输入上限为 5120 token，`batch_size=2`；长章节的实际耗时及内存占用需在本机验证。`search` 只检索和精排，`ask` 还会调用 DeepSeek API。
+
+### 4. FastAPI/React 演示（共用六文件索引）
+
+服务读取 `data/experiments/langchain_pdf_pilot/` 下的 Chroma、BM25 和文本块文件；启动前必须已在本地完成上面的六文件建库。旧的 `data/chroma/` 索引不再是运行时数据源。
+
+启动后端：
 
 ```bash
 uv run uvicorn backend.app:app --host 127.0.0.1 --port 8000
@@ -123,9 +143,7 @@ uv run uvicorn backend.app:app --host 127.0.0.1 --port 8000
 - API 文档：<http://127.0.0.1:8000/docs>
 - 健康检查：<http://127.0.0.1:8000/api/health>
 
-### 5. 启动前端
-
-打开另一个终端：
+启动前端（另一个终端）：
 
 ```bash
 cd frontend
@@ -157,15 +175,15 @@ npm run build
 
 ## 评测结果
 
-项目使用 88 道有效问题进行端到端测试，并记录 Context Relevance、Faithfulness 与 Answer Relevance 三项指标：
+六文件索引在 88 道有效问题上的评测结果如下。检索与生成两阶段平均耗时分别为 **3.75 s** 和 **1.26 s**，合计 **5.02 s/题**；合计值不是 HTTP 端到端耗时。
 
-| 指标 | 平均分 | 满分率 |
-| --- | ---: | ---: |
-| Context Relevance | 0.9574 | 90.91% |
-| Faithfulness | 1.0000 | 100.00% |
-| Answer Relevance | 0.9659 | 92.05% |
+| Ragas 指标 | 平均分 |
+| --- | ---: |
+| 忠实度（Faithfulness） | 0.7625 |
+| 上下文相关性（Context Relevance） | 0.9574 |
+| 答案相关性（Answer Relevancy） | 0.8741 |
 
-评分范围为 `0 / 0.25 / 0.5 / 0.75 / 1`。评测文件包含企业资料内容，因此未公开。
+另有自定义 LLM 裁判评分，与 Ragas 指标不同，不在此表混用。逐题评测文件包含企业资料内容，因此未公开；其中部分低分题仍需人工复核。
 
 ## License
 
